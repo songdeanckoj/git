@@ -5,7 +5,7 @@
         <div v-if="!browserItems.guideShowed"
           class="ptk__guide">
           <div class="ptk__guide-body">
-            <ptk-button style="display: block">Pixiv Toolkit</ptk-button>
+            <ptk-button style="display: block">P*</ptk-button>
             <svg viewBox="0 0 10 15" id="ptk__guide-arrow" width="10" height="15" style="position: relative; top: 3px" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
               <path d="M5 0 L5 15 L10 10 M5 15 L0 10" :stroke="isDark ? '#fff' : '#333'" stroke-width="2" fill="transparent" />
             </svg>
@@ -17,22 +17,21 @@
           <div id="ptk__new-handler"
             @click="handlerClickHandle"
           >
-            <svg viewBox="0 0 222 40" id="ptk__new-handler-bg" width="222" height="40" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
-              <path d="M0 40 C 25 40, 43 27, 65 15 C 82 4, 93 0, 111 0 C 131 0, 142 4, 161 15 C 180 27, 198 40, 222 40 Z" stroke-width="0" :fill="hasError ? '#ff3b3b' : handlerBackground" />
-            </svg>
-            <svg v-if="!hasError" viewBox="0 0 40 15" id="ptk__new-handler-arrow" width="40" height="25" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
-              <path d="M 0 15 L 20 0 L 40 15" :stroke="handlerForeground" stroke-width="6" fill="transparent"/>
-              <circle cx="0" cy="15" r="3" stroke-width="0" :fill="handlerForeground"/>
-              <circle cx="40" cy="15" r="3" stroke-width="0" :fill="handlerForeground"/>
-            </svg>
-            <svg v-if="hasError" viewBox="0 0 40 40" id="ptk__new-handler-cross" width="40" height="40" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
-              <path d="M0 0 L40 40" :stroke="handlerForeground" stroke-width="10" fill="transparent"/>
-              <path d="M0 40 L40 0" :stroke="handlerForeground" stroke-width="10" fill="transparent"/>
-              <circle cx="0" cy="0" r="5" stroke-width="0" :fill="handlerForeground"/>
-              <circle cx="40" cy="40" r="5" stroke-width="0" :fill="handlerForeground"/>
-              <circle cx="40" cy="0" r="5" stroke-width="0" :fill="handlerForeground"/>
-              <circle cx="0" cy="40" r="5" stroke-width="0" :fill="handlerForeground"/>
-            </svg>
+            <div id="ptk__new-handler-bg">
+              <svg v-if="!hasError" viewBox="0 0 40 15" id="ptk__new-handler-arrow" width="40" height="25" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+                <path d="M 0 15 L 20 0 L 40 15" :stroke="handlerForeground" stroke-width="6" fill="transparent"/>
+                <circle cx="0" cy="15" r="3" stroke-width="0" :fill="handlerForeground"/>
+                <circle cx="40" cy="15" r="3" stroke-width="0" :fill="handlerForeground"/>
+              </svg>
+              <svg v-if="hasError" viewBox="0 0 40 40" id="ptk__new-handler-cross" width="40" height="40" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+                <path d="M0 0 L40 40" :stroke="handlerForeground" stroke-width="10" fill="transparent"/>
+                <path d="M0 40 L40 0" :stroke="handlerForeground" stroke-width="10" fill="transparent"/>
+                <circle cx="0" cy="0" r="5" stroke-width="0" :fill="handlerForeground"/>
+                <circle cx="40" cy="40" r="5" stroke-width="0" :fill="handlerForeground"/>
+                <circle cx="40" cy="0" r="5" stroke-width="0" :fill="handlerForeground"/>
+                <circle cx="0" cy="40" r="5" stroke-width="0" :fill="handlerForeground"/>
+              </svg>
+            </div>
           </div>
         </div>
         <div id="ptk__action__wrapper">
@@ -58,8 +57,9 @@
 </template>
 
 <script>
+import browser from '@/modules/Extension/browser';
 import Button from '@/content_scripts/components/Button';
-import ThemeDetector from '@/content_scripts/ThemeDetector';
+import ThemeDetector from '@/content_scripts/modules/ThemeDetector';
 
 export default {
   components: {
@@ -216,6 +216,7 @@ export default {
     position: relative;
     top: -50px;
     background: #fff;
+    border: 2px solid #fff;
     border-radius: 30px;
     box-shadow: 0 0 8px rgba(0,0,0,0.3);
     overflow: hidden;
@@ -232,7 +233,7 @@ export default {
 
   #ptk__action__wrapper {
     display: flex;
-    padding: 5px;
+    padding: 3px;
   }
 
   .ptk__action__wrapper__body {
@@ -309,27 +310,29 @@ export default {
   #ptk__new-handler {
     position: relative;
     margin: 0 auto;
-    width: 100px;
+    width: 100%;
     height: 18px;
     cursor: pointer;
   }
 
   #ptk__new-handler-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+    width: 40px;
+    height: 30px;
+    margin: 0 auto;
+    position: relative;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    background-color: #0096fa;
   }
 
   #ptk__new-handler-arrow,
   #ptk__new-handler-cross {
-      width: 13px;
-      height: 8px;
-      position: absolute;
-      top: 5px;
-      left: 44px;
-      transition: all 500ms;
+    width: 13px;
+    height: 8px;
+    position: absolute;
+    top: 5px;
+    left: 14px;
+    transition: all 500ms;
   }
 
   .ptk-pixiv-omina-content {
@@ -349,24 +352,27 @@ export default {
   }
 
   .ptk__guide-body {
-    width: 140px;
     display: flex;
     flex-direction: column;
     align-items: center;
     margin: 0 auto;
+
+    .button {
+      margin-right: 0;
+    }
   }
 
   @keyframes guide {
     0% {
-      top: -70px;
+      top: -75px;
     }
 
     50% {
-      top: -65px
+      top: -70px
     }
 
     100% {
-      top: -70px;
+      top: -75px;
     }
   }
 }

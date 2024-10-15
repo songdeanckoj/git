@@ -1,3 +1,41 @@
+v6.4.2
+Remove the listener for event onDeterminingFilename;
+Fixed issues（#271, #284, #288）。
+
+v6.4.0
+Optimize download save mode settings;
+Fixed issues (#242、#270、#271、#277、#281).
+
+v6.3.2
+Fixed some issues (#256, #253, #251, #260, #258).
+
+v6.3.1
+Added options on whether to create a work folder;
+Added classic download mode;
+Fixed some issues.
+
+v6.3.0
+Added options on whether to create a work folder;
+Added classic download mode;
+Fixed some issues.
+
+v6.2.0
+Simplify the process of adding task. Now the download manager will be opened automatically and task will be added;
+Add default types for generating Pixiv animated images, including GIF/APNG/MP4/WEBM;
+Add task download progress indicator on the target page.
+
+v6.1.0
+Added a option for controlling the feature about packing multiple images in download item to a zip file.
+
+v6.0.0
+Notice: This version include some break changes so you maybe encounter some problems, feel free to open an issue if you feel something wrong;
+Adapted manifest v3;
+Change the way for managing downloads, download tasks are managed by Download Manager, please open Download Manager before downloading anything;
+Refactor the visit history feature, and because of manifest v3 the visit histories in old version will be lost after this update;
+Refactor the logic of generating ugoria animation, deprecated gif.js and whammy and replace them by ffmpeg;
+Fix issue about downloading Pixiv Comic Episode;
+For more detail for this version, please visit the project page https://github.com/leoding86/webextension-pixiv-toolkit/blob/master/readme.md
+
 v5.5.3
 Fix issue about download panel can't collapse when "Activate download panel automatically" setting is disabled;
 Fix issue about Fanbox can't be opened when using Firefox;

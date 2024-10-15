@@ -1,8 +1,8 @@
 {
-   "author": {
+   "_author": {
       "message": "画师"
    },
-   "author_id": {
+   "_author_id": {
       "message": "画师编号"
    },
    "downloadFullscreenZipFile": {
@@ -33,7 +33,7 @@
       "message": "下载Pixiv，Fanbox、Comic上的动图、图片、漫画和小说等"
    },
    "extName": {
-      "message": "Pixiv工具箱"
+      "message": "Pixiv 工具箱 Next"
    },
    "generate_gif_btn_complete_text": {
       "message": "保存GIF"
@@ -131,11 +131,8 @@
    "Manga": {
     "message": "漫画"
    },
-   "rename_manga": {
+   "_rename_manga": {
       "message": "重命名漫画"
-   },
-   "rename_manga_image": {
-      "message": "重命名漫画内图片"
    },
    "quick_picks": {
       "message": "快速选取"
@@ -266,8 +263,8 @@
    "Novel": {
        "message": "小说"
    },
-   "rename_novel": {
-       "message": "重命名小说"
+   "_novel_rename_rule": {
+       "message": "小说重命名规则"
    },
    "include_novel_description": {
        "message": "包含小说描述内容"
@@ -281,14 +278,11 @@
    "clear_history_data_cannot_be_reversed": {
        "message": "此操作不可恢复"
    },
-   "Clear": {
+   "_clear": {
        "message": "清空"
    },
    "History":{
        "message": "历史记录"
-   },
-   "Cancel": {
-       "message": "取消"
    },
    "comment": {
        "message": "评论"
@@ -356,17 +350,14 @@
    "Download_panel_will_show_up_automatically_when_page_loaded": {
        "message": "当目标页面被加载完成时，自动显示下载面板"
    },
-   "illust_history": {
+   "_history": {
        "message": "历史记录"
    },
    "Illustration": {
        "message": "绘画"
    },
-   "Rename_illustration": {
+   "_rename_illustration": {
        "message": "重命名绘画"
-   },
-   "Rename_illustration_image": {
-       "message": "重命名绘画图片"
    },
    "Download_file_if_everything_is_ready": {
        "message": "准备完成直接下载"
@@ -404,13 +395,13 @@
    "_Enable_this_may_cause_issue_about_loading_images": {
        "message": "启用此项可能会导致加载页面问题"
    },
-   "year": {
+   "_year": {
        "message": "年"
    },
-   "month": {
+   "_month": {
        "message": "月"
    },
-   "day": {
+   "_day": {
        "message": "日"
    },
    "_keep_page_number": {
@@ -611,9 +602,6 @@
    "_max_history_items": {
        "message": "最多历史记录"
    },
-   "_max_download_records": {
-       "message": "最多下载记录"
-   },
    "_reload_to_apply_change": {
        "message": "重新加载以应用更改（所有下载中的任务将会中断）"
    },
@@ -671,7 +659,7 @@
    "_select_and_dl": {
        "message": "选择并下载"
    },
-   "_select_images_you_want_to_download": {
+   "_select_pages_you_want_to_download": {
        "message": "选择要下载的图片"
    },
    "_pending": {
@@ -705,10 +693,10 @@
        "message": "选择动图转化工具"
    },
    "_startup_message": {
-       "message": "自从版本v5.0.0开始，插件可以独立保存每个图片，而不需要一定将他们打包才能保存。但是这个需要用户授权这样做。请点击更多信息以获取详情。你可以稍后在设置中修改以下设置。"
+       "message": "自从6.0.0版本更新以来问题一直不断，其主要原因还是当初升级过于仓促导致了一些决策上的失误。经过这段时间的修修补补应该算是进入正规了，在这里也谢谢继续使用并反映问题的你们。由于后面有些个人事务需要处理，计划会每两周集中处理issue，也请大家理解🙏"
    },
    "_ffmpeg_custom_convert_command": {
-       "message": "FFmpeg自定义转换命令"
+       "message": "FFmpeg自定义转换命令，使用回车输入新行"
    },
    "_custom": {
        "message": "自定义"
@@ -728,8 +716,8 @@
    "_create_subdirectory": {
        "message": "创建子目录"
    },
-   "_create_subdirectory_when_download_Pack_Files_setting_is_disabled": {
-       "message": "当下载\"打包文件\"禁用时为下载的作品创建子目录"
+   "_create_subdirectory_for_illustration": {
+       "message": "为下载的作品创建子目录"
    },
    "_dynamic": {
        "message": "动态"
@@ -821,9 +809,6 @@
    "_rename_comic": {
         "message": "重命名漫画"
     },
-    "_rename_comic_image": {
-        "message": "重命名漫画图片"
-    },
     "_save_comic_in_relative_location": {
         "message": "保存漫画到相对位置"
     },
@@ -847,5 +832,161 @@
     },
     "_page_num": {
         "message": "页码"
+    },
+    "_download_metadata": {
+        "message": "下载元数据"
+    },
+    "_download_metadata_when_downloading_works_only_support_works_from_pixiv_main_site": {
+        "message": "下载作品时同时下载元数据，仅支持Pixiv主站点（不支持小说类型）"
+    },
+    "_all": {
+        "message": "全部"
+    },
+    "_download_manager": {
+        "message": "下载管理器"
+    },
+    "_show_in_folder": {
+        "message": "在文件夹中显示"
+    },
+    "_download_task_settings": {
+        "message": "下载任务设置"
+    },
+    "_global_settings": {
+        "message": "全局"
+    },
+    "_global_setting": {
+        "message": "全局"
+    },
+    "_rename": {
+        "message": "重命名"
+    },
+    "_downloaded": {
+        "message": "已下载"
+    },
+    "_the_resource_is_already_in_download_manager": {
+        "message": "此资源的下载已存在于下载管理器中，是否重新下载？"
+    },
+    "_download_manager_isnt_open": {
+        "message": "下载管理器似乎没有开启，你可以在设置页面或弹出页面中打开下载管理器。现在打开？"
+    },
+    "_switch_to_it_and_close": {
+        "message": "切换并关闭"
+    },
+    "_download_manager_is_already_opened": {
+        "message": "下载管理器已经开启。"
+    },
+    "_there_isnt_any_download": {
+        "message": "当前没有任何下载"
+    },
+    "_cancel": {
+        "message": "取消"
+    },
+    "_max_process_download_tasks": {
+        "message": "最大同时执行下载数"
+    },
+    "_rename_illustration_image": {
+        "message": "重命名绘画图片"
+    },
+    "_rename_manga_image": {
+        "message": "重命名漫画图片"
+    },
+    "_rename_fanbox_post_image": {
+        "message": "重命名FANBOX文章图片"
+    },
+    "_rename_pixiv_comic_episode_image": {
+        "message": "重命名Pixiv Comic页码图片"
+    },
+    "_zip_multiple_images": {
+        "message": "将下载打包成ZIP"
+    },
+    "_zip_multiple_images_desc": {
+        "message": "仅对绘画、漫画作品生效"
+    },
+    "_download_gif": {
+        "message": "下载GIF"
+    },
+    "_download_apng": {
+        "message": "下载APNG"
+    },
+    "_download_webm": {
+        "message": "下载WEBM"
+    },
+    "_download_mp4": {
+        "message": "下载MP4"
+    },
+    "_download_custom": {
+        "message": "自定义下载"
+    },
+    "_download_added": {
+        "message": "下载已添加"
+    },
+    "_opening_download_manager": {
+        "message": "下载管理器打开中，请稍后..."
+    },
+    "_running_too_many_download_tasks_at_same_time_may_be_cause_high_CPU_usage": {
+        "message": "同时进行太多下载会导致CPU高负载"
+    },
+    "_use_standalone_download_manage": {
+        "message": "使用独立的下载管理器"
+    },
+    "_always": {
+        "message": "总是"
+    },
+    "_when_there_is_only_one_image": {
+        "message": "只有一张图片时"
+    },
+    "_dont_create_work_folder": {
+        "message": "当...不创建作品文件夹"
+    },
+    "_dont_create_work_folder_desc": {
+        "message": "此设置只对绘画和FanBox作品有效"
+    },
+    "_combin_work_and_image_rename_rule_when_dont_create_work_folder": {
+        "message": "当只有不创建作品文件夹时，连接作品和图片重命名规则（下划线连接）"
+    },
+    "_new_settings": {
+        "message": "新选项"
+    },
+    "_legacy": {
+        "message": "经典"
+    },
+    "_download_mode": {
+        "message": "下载模式"
+    },
+    "_download_mode_desc": {
+        "message": "经典模式下不支持FFmpeg以及生成MP4"
+    },
+    "_only_if_the_work_has_multiple_images": {
+        "message": "仅当作品有多张图时"
+    },
+    "_only_when_downloading_multiple_images": {
+        "message": "仅当下载多张图时"
+    },
+    "_only_if_the_work_has_one_image": {
+        "message": "仅当作品有一个作品时"
+    },
+    "_only_when_downloading_one_image": {
+        "message": "仅当下载单张图时"
+    },
+    "_download_save_mode": {
+        "message": "下载保存模式"
+    },
+    "_download_save_mode_0_desc": {
+        "message": "将下载的图片打包到ZIP文件"
+    },
+    "_download_save_mode_1_desc": {
+        "message": "将下载的图片直接保存到文件夹"
+    },
+    "_pack_in_zip": {
+        "message": "打包到ZIP"
+    },
+    "_save_in_folder": {
+        "message": "保存到文件夹"
+    },
+    "_always_dont": {
+        "message": "总是不"
+    },
+    "_always_create": {
+        "message": "总是创建"
     }
 }

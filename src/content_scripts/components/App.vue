@@ -1,14 +1,46 @@
+<!--
+ * @Author: Leo Ding <leoding86@msn.com>
+ * @Date: 2024-08-08 08:43:42
+ * @LastEditors: Leo Ding <leoding86@msn.com>
+ * @LastEditTime: 2024-08-11 17:20:18
+-->
 <template>
   <control-panel v-if="showApp" :lastError="lastError"
     :panelStyle="browserItems.downloadPanelStyle"
     :panelPosition="browserItems.downloadPanelPosition"
+    :class="downloadButtonType"
   >
-    <ugoira-tool v-if="isUgoira" :tool="tool">ugoira</ugoira-tool>
-    <manga-tool v-else-if="isManga" :tool="tool">manga</manga-tool>
-    <illust-tool v-else-if="isIllust" :tool="tool">illust</illust-tool>
-    <novel-tool v-else-if="isNovel" :tool="tool">novel</novel-tool>
-    <ptk-button v-else-if="isUndetermined" text="Parsing information"></ptk-button>
-    <ptk-button v-if="!isUndetermined && browserItems.showPixivOmina"
+    <template v-if="!isUgoira">
+      <ptk-button @click="download"
+      >{{ tl('_download') }}{{ generalTaskProgressText }}</ptk-button>
+    </template>
+    <template v-else>
+      <ptk-button @click="download({ ugoiraConvertType: 'apng' })"
+      >{{ tl('_download_apng') }}{{ apngProgress }}</ptk-button>
+
+      <ptk-button @click="download({ ugoiraConvertType: 'gif' })"
+      >{{ tl('_download_gif') }}{{ gifProgress }}</ptk-button>
+
+      <ptk-button @click="download({ ugoiraConvertType: 'webm' })"
+      >{{ tl('_download_webm') }}{{ webmProgress }}</ptk-button>
+
+      <ptk-button @click="download({ ugoiraConvertType: 'mp4' })"
+      >{{ tl('_download_mp4') }}{{ mp4Progress }}</ptk-button>
+
+      <ptk-button @click="download"
+      >{{ tl('_download_custom') }}{{ customProgress }}</ptk-button>
+    </template>
+    <page-selector
+      ref="pageSelector"
+      v-if="pages && pages.length > 1"
+      :items="pages"
+      @select="pageSelectorSelectHandler"
+      @download="pageSelectorDownloadHandler"
+    ></page-selector>
+    <div class="ptk__download-added-notice" v-show="showNotice">
+      {{ this.noticeMessage }}
+    </div>
+    <ptk-button v-if="browserItems.showPixivOmina"
       class="ptk__pixiv-omina__btn"
       @click="passToPixivOmina"
     >Pixiv Omina</ptk-button>
@@ -16,154 +48,378 @@
 </template>
 
 <script>
+import '@/content_scripts/styles/dark.scss';
+import Adapter from '@/content_scripts/modules/Adapter';
+import Button from '@/content_scripts/components/Button.vue';
 import ControlPanel from '@/content_scripts/components/ControlPanel.vue';
-import Detector from "@/content_scripts/Detector"
-import Novel from "@/content_scripts/components/Novel"
-import Manga from '@/content_scripts/components/Manga'
-import Illust from '@/content_scripts/components/Illust'
-import Ugoira from '@/content_scripts/components/Ugoira'
-import IllustHistoryPort from '@/modules/Ports/IllustHistoryPort/RendererPort'
-import Button from '@/content_scripts/components/Button'
+import PageSelector from '@/content_scripts/components/PageSelector.vue';
+import browser from '@/modules/Extension/browser';
+import AbstractResource from "@/modules/PageResource/AbstractResource";
+import DownloadTaskObserver from '../modules/DownloadTaskObserver';
+import { RuntimeError } from '@/errors';
+import moment from 'moment';
 
 export default {
   components: {
     'control-panel': ControlPanel,
-    "novel-tool": Novel,
-    'manga-tool': Manga,
-    'illust-tool': Illust,
-    'ugoira-tool': Ugoira,
-    'ptk-button': Button
+    'ptk-button': Button,
+    'page-selector': PageSelector,
   },
 
   data() {
     return {
-      pageType: Detector.UNDETERMINED_TYPE,
-      currentUrl: null,
-      tool: null,
-      lastError: null,
+      /**
+       * @type {string}
+       */
+      lastError: '',
+
+      /**
+       * @type {boolean}
+       */
       isDark: false,
+
+      /**
+       * @type {string[]}
+       */
+      pages: [],
+
+      /**
+       * @type {AbstractResource}
+       */
+      resource: null,
+
+      /**
+       * @type {number[]}
+       */
+      selectedIndexes: [],
+
+      /**
+       * @type {boolean}
+       */
+      downloadedAt: 0,
+
+      showNotice: false,
+
+      noticeMessage: '',
+
+      ugoiraTaskProgresses: {
+        'gif': { d: 0, p: 0 },
+        'apng': { d: 0, p: 0 },
+        'webm': { d: 0, p: 0 },
+        'mp4': { d: 0, p: 0 },
+        'custom': { d: 0, p: 0 }
+      },
+
+      generalTaskProgress: 0
     };
   },
 
   computed: {
+    /**
+     * @returns {boolean}
+     */
     showApp() {
-      return this.pageType !== Detector.UNSUPPORTED_TYPE;
+      return !!this.resource;
     },
 
-    isUndetermined() {
-      return Detector.UNDETERMINED_TYPE === this.pageType
+    downloadButtonType() {
+      return this.downloadedAt > 0 ? 'success' : '';
     },
 
     isUgoira() {
-      return Detector.UGOIRA_TYPE === this.pageType;
+      return this.resource &&
+        this.resource.context &&
+        this.resource.context.type === 'Illust' &&
+        this.resource.context.illustType === 2
     },
 
-    isManga() {
-      return Detector.MANGA_TYPE === this.pageType;
+    apngProgress() {
+      return this.ugoiraProgress('apng');
     },
 
-    isIllust() {
-      return Detector.ILLUST_TYPE === this.pageType;
+    gifProgress() {
+      return this.ugoiraProgress('gif');
     },
 
-    isNovel() {
-      return Detector.NOVEL_TYPE === this.pageType;
+    webmProgress() {
+      return this.ugoiraProgress('webm');
+    },
+
+    mp4Progress() {
+      return this.ugoiraProgress('mp4');
+    },
+
+    customProgress() {
+      return this.ugoiraProgress('custom');
+    },
+
+    generalTaskProgressText() {
+      if (this.generalTaskProgress === 1) {
+        return ' ✔';
+      } else if (this.generalTaskProgress > 0) {
+        return ' ' + (this.generalTaskProgress * 100).toFixed(2) + '%';
+      } else {
+        return '';
+      }
     }
   },
 
   created() {
-    this.illustHistoryPort = IllustHistoryPort.getInstance();
-    this.detector = new Detector();
-  },
+    /**
+     * @type {Adapter}
+     */
+    this.adapter = new Adapter();
 
-  mounted() {
-    let vm = this;
+    /**
+     * @type {ReturnType<typeof setTimeout>}
+     */
+    this.noticeCloseTimeout;
 
-    let observer = new MutationObserver((mutationsList, observer) => {
-      /**
-       * If different page has been loaded, app should re-reject the page
-       */
-      if (window.location.href !== vm.currentUrl) {
-        vm.currentUrl = window.location.href;
+    this.downloadTaskObserver = DownloadTaskObserver.getObserver();
+    this.downloadTaskObserver.addListener('status', message => {
+      const downloadTasksStatus = message.downloadTasksStatus;
 
-        // set pageType to null for mounting tool component
-        vm.pageType = Detector.UNDETERMINED_TYPE;
-
-        vm.lastError = null;
-
-        vm.injectPage();
+      if (downloadTasksStatus && downloadTasksStatus.length > 0) {
+        downloadTasksStatus.forEach(task => {
+          if (task.type === 'PIXIV_UGOIRA') {
+            this.ugoiraTaskProgresses[task.convertType] = Object.assign(
+              {}, this.ugoiraTaskProgresses[task.convertType], { d: task.progress, p: task.processProgress }
+            );
+          } else {
+            this.generalTaskProgress = task.progress;
+          }
+        });
       }
     });
 
-    observer.observe(document.querySelector('body'), {
-      attributes: true,
-      childList: true,
-      subtree: true
+    window.$eventBus.$on('pagechange', page => {
+      this.initialProgress();
+
+      this.abortAdapterParse();
+
+      if (page) {
+        this.resource = window.$app.resource;
+        this.observeDownloadTask();
+
+        /**
+         * Save visit history
+         */
+        browser.runtime.sendMessage({
+          to: 'ws',
+          action: 'history:itemVisit',
+          args: {
+            uid: this.resource.getUid(),
+            title: this.resource.getTitle(),
+            userName: this.resource.getUserName(),
+            cover: this.resource.getCover(),
+            url: this.resource.getUrl(),
+            type: this.resource.getType(),
+            r: this.resource.getR(),
+            visited_at: moment().unix(),
+          }
+        });
+
+        if (this.resource.getPages()) {
+          if (this.resource.getPageResolver()) {
+            this.resource.getPages().forEach(page => {
+              this.pages.push('');
+            });
+
+            const pageResolver = this.resource.getPageResolver();
+            const resolvePages = async (index = 0, pages) => {
+              const page = pages[index];
+
+              if (!page) {
+                return;
+              }
+
+              const url = await pageResolver(page);
+
+              if (this.$refs.pageSelector) {
+                this.$refs.pageSelector.updatePage(index, url);
+              }
+
+              resolvePages(index + 1, pages);
+            };
+
+            resolvePages(0, this.resource.getPages());
+          } else {
+            this.pages = this.resource.getPages();
+          }
+        }
+
+        this.checkIfDownloaded();
+      }
     });
+  },
 
-    this.currentUrl = window.location.href;
-
-    this.injectPage();
+  beforeDestroy() {
+    this.downloadTaskObserver.stopObserve();
   },
 
   methods: {
-    injectPage() {
-      let vm = this;
+    initialProgress() {
+      this.generalTaskProgress = 0;
+      this.ugoiraTaskProgresses = {
+        'gif': { d: 0, p: 0 },
+        'apng': { d: 0, p: 0 },
+        'webm': { d: 0, p: 0 },
+        'mp4': { d: 0, p: 0 },
+        'custom': { d: 0, p: 0 }
+      };
+    },
 
-      this.detector
-        .init(this.currentUrl)
-        .then(() => {
-          return vm.detector.injectPage();
-        })
-        .then(tool => {
-          vm.tool = tool;
-          vm.pageType = vm.detector.currentType;
+    ugoiraProgress(type) {
+      const progress = this.ugoiraTaskProgresses[type];
 
-          if (!vm.browserItems.enableSaveVisitHistory) {
-            return;
-          }
+      if (progress) {
+        if (progress.p === 1) {
+          this.downloadButtonType = 'success';
+          return ' ✔';
+        } else if (progress.p > 0) {
+          return ` (P:${(progress.p * 100).toFixed(2)}%)`;
+        } else if (progress.d > 0) {
+          return ` (D:${(progress.d * 100).toFixed(2)}%)`;
+        }
+      }
 
-          if (tool.isR() && vm.browserItems.notSaveNSFWWorkInHistory) {
-            return;
-          }
+      return '';
+    },
 
-          // check page type to determine save history
-          if (vm.isUgoira || vm.isManga || vm.isIllust) {
-            vm.illustHistoryPort.saveIllustHistory({
-              id: vm.tool.getId(),
-              title: vm.tool.getTitle(),
-              images: vm.tool.getImages(),
-              type: vm.pageType,
-              userId: vm.tool.getUserId(),
-              userName: vm.tool.getUserName(),
-              viewed_at: Math.round(Date.now() / 1000),
-              r: vm.tool.isR()
-            });
-          } else if (vm.isNovel) {
-            vm.illustHistoryPort.saveIllustHistory({
-              id: 'N' + vm.tool.getId(),
-              title: vm.tool.getTitle(),
-              image: vm.tool.getCover(),
-              isNovel: true,
-              userId: vm.tool.getId(),
-              userName: vm.tool.getUserName(),
-              viewed_at: Math.round(Date.now() / 1000),
-              r: vm.tool.isR()
-            });
-          }
-        })
-        .catch(e => {
-          console.log(e);
-          if (typeof e === 'string') {
-            this.lastError = e;
-          } else if (e instanceof Error) {
-            if (e.name === 'InvalidPageError') {
-              this.pageType = Detector.UNSUPPORTED_TYPE;
+    observeDownloadTask() {
+      if (this.isUgoira) {
+        this.downloadTaskObserver.observeDownloadTasks(
+          ['gif', 'apng', 'mp4', 'webm', 'custom'].map(type => this.resource.getDownloadTaskId(type))
+        );
+      } else {
+        this.downloadTaskObserver.observeDownloadTasks([this.resource.getDownloadTaskId()]);
+      }
+    },
+
+    displayNotice(message) {
+      if (this.noticeCloseTimeout) {
+        clearTimeout(this.noticeCloseTimeout);
+      }
+
+      this.noticeMessage = message;
+      this.showNotice = true;
+
+      this.noticeCloseTimeout = setTimeout(() => this.showNotice = false, 3000);
+    },
+
+    abortAdapterParse() {
+      this.adapter.abort();
+      this.resource = null;
+      this.downloadedAt = 0;
+      this.pages = this.selectedIndexes = [];
+    },
+
+    /**
+     * @param {Function} [fnAfterOpen]
+     */
+    async ensureDownloadManagerOpen(fnAfterOpen) {
+      const checkResponse = await browser.runtime.sendMessage({
+        to: 'ws',
+        action: 'download:getDownloadManagerTab'
+      });
+
+      if (!checkResponse) {
+        this.displayNotice(this.tl('_opening_download_manager'))
+      }
+
+      const response = await browser.runtime.sendMessage({
+        to: 'ws',
+        action: 'download:ensureDownloadManagerOpen'
+      });
+
+      if (response) {
+        if (fnAfterOpen) {
+          fnAfterOpen();
+        }
+      } else {
+        this.displayNotice(this.tl('_cant_open_download_manager_please_open_manully'))
+      }
+    },
+
+    async checkIfDownloaded() {
+      let downloadedAt = await browser.runtime.sendMessage({
+        to: 'ws',
+        action: 'history:checkIfDownloaded',
+        args: {
+          uid: this.resource.getUid()
+        }
+      });
+
+      if (downloadedAt) {
+        this.downloadedAt = downloadedAt;
+      }
+    },
+
+    getDownloadArgs({ ugoiraConvertType }) {
+      return {
+        unpackedResource: this.resource.unpack(),
+        options: {
+          ugoiraConvertType,
+          selectedIndexes: this.selectedIndexes
+        }
+      };
+    },
+
+    async downloadWithDownloadManager({ ugoiraConvertType, redownload = false }) {
+      await this.ensureDownloadManagerOpen(async () => {
+        const args = this.getDownloadArgs({ ugoiraConvertType });
+        args.options.redownload = redownload;
+
+        let response = await browser.runtime.sendMessage({
+          action: 'download:addDownload',
+          args
+        });
+
+        if (!response.result && redownload === false) {
+          if (response.errorName === 'DownloadTaskExistsError') {
+            if (window.confirm(this.tl(`_the_resource_is_already_in_download_manager`))) {
+              this.downloadWithDownloadManager({ ugoiraConvertType, redownload: true })
             }
 
-            this.lastError = e.message;
+            return;
+          } else {
+            alert(this.tl('_unkown_error') + ': ' + response.errorName);
+          }
+          return;
+        } else {
+          this.displayNotice(this.tl('_download_added'));
+        }
+
+        /**
+         * Save download history
+         */
+        browser.runtime.sendMessage({
+          to: 'ws',
+          action: 'history:itemDownload',
+          args: {
+            uid: this.resource.getUid(),
+            title: this.resource.getTitle(),
+            userName: this.resource.getUserName(),
+            cover: this.resource.getCover(),
+            url: this.resource.getUrl(),
+            type: this.resource.getType(),
+            r: this.resource.getR(),
+            downloaded_at: moment().unix(),
           }
         });
+      });
+    },
+
+    download({ ugoiraConvertType } = {}) {
+      this.downloadWithDownloadManager({ ugoiraConvertType });
+    },
+
+    pageSelectorSelectHandler(selectedPages, selectedIndexes) {
+      this.selectedIndexes = selectedIndexes;
+    },
+
+    pageSelectorDownloadHandler() {
+      this.download();
     },
 
     disableGuide() {
@@ -174,6 +430,14 @@ export default {
 
     passToPixivOmina() {
       window.location.assign(`pixiv-omina://create-download?url=${encodeURIComponent(window.location.href)}`);
+    },
+
+    test() {
+      const { createFFmpeg } = FFmpeg;
+      this.ffmpeg = new createFFmpeg({
+        log: true,
+        corePath: browser.runtime.getURL('lib/ffmpeg/ffmpeg-core.js'),
+      });
     }
   }
 }
@@ -182,5 +446,31 @@ export default {
 <style lang="scss">
 .ptk__pixiv-omina__btn {
   margin-left: 5px;
+}
+
+.ptk__downloaded-dot {
+  background: green;
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+}
+
+.ptk__download-added-notice {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgb(0, 150, 250, .75);
+  color: #fff;
+  font-size: 14px;
+  border-radius: 999px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, .3);
+  padding: 10px 15px;
+}
+
+.ptk__container.success {
+  .ptk__container__body-container {
+    border-color: #00dc68;
+  }
 }
 </style>

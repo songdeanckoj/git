@@ -1,8 +1,8 @@
 {
-   "author": {
+   "_author": {
       "message": "Author"
    },
-   "author_id": {
+   "_author_id": {
       "message": "Author ID"
    },
    "downloadFullscreenZipFile": {
@@ -33,10 +33,7 @@
       "message": "Download ugoira, illustrations, manga and novel on Pixiv, Pixiv Fanbox and Pixiv Comic."
    },
    "extName": {
-      "message": "Pixiv Toolkit"
-   },
-   "generate_btn_error_text": {
-      "message": "Error"
+      "message": "Pixiv Toolkit Next"
    },
    "generate_gif_btn_complete_text": {
       "message": "Save GIF"
@@ -131,11 +128,8 @@
    "Manga": {
     "message": "Manga"
    },
-   "rename_manga": {
+   "_rename_manga": {
       "message": "Rename manga"
-   },
-   "rename_manga_image": {
-      "message": "Rename manga image file"
    },
    "quick_picks": {
       "message": "Quick picks"
@@ -266,8 +260,8 @@
    "Novel": {
        "message": "Novel"
    },
-   "rename_novel": {
-       "message": "Rename novel"
+   "_novel_rename_rule": {
+       "message": "Novel rename rule"
    },
    "include_novel_description": {
        "message": "Include novel description"
@@ -281,14 +275,11 @@
    "clear_history_data_cannot_be_reversed": {
        "message": "This operation cannot be reversed"
    },
-   "Clear": {
+   "_clear": {
        "message": "Clear"
    },
    "History":{
        "message": "History"
-   },
-   "Cancel": {
-       "message": "Cancel"
    },
    "comment": {
        "message": "Comment"
@@ -356,17 +347,14 @@
    "Download_panel_will_show_up_automatically_when_page_loaded": {
        "message": "Download panel will show up automatically when page loaded"
    },
-   "illust_history": {
+   "_history": {
        "message": "History"
    },
    "Illustration": {
        "message": "Illustration"
    },
-   "Rename_illustration": {
+   "_rename_illustration": {
        "message": "Rename illustration"
-   },
-   "Rename_illustration_image": {
-       "message": "Rename illustration image"
    },
    "Download_file_if_everything_is_ready": {
        "message": "Download file directly if everything is ready"
@@ -404,13 +392,13 @@
    "_Enable_this_may_cause_issue_about_loading_images": {
        "message": "Enable this may cause issue about loading images"
    },
-   "year": {
+   "_year": {
        "message": "year"
    },
-   "month": {
+   "_month": {
        "message": "month"
    },
-   "day": {
+   "_day": {
        "message": "day"
    },
    "_keep_page_number": {
@@ -611,9 +599,6 @@
    "_max_history_items": {
        "message": "Max history items"
    },
-   "_max_download_records": {
-       "message": "Max download records"
-   },
    "_reload_to_apply_change": {
        "message": "Reload to apply change (Add downloads in progress will be aborted)"
    },
@@ -671,8 +656,8 @@
    "_select_and_dl": {
        "message": "Select & DL"
    },
-   "_select_images_you_want_to_download": {
-       "message": "Select image(s) you wan to download"
+   "_select_pages_you_want_to_download": {
+       "message": "Select page(s) you wan to download"
    },
    "_pending": {
        "message": "Pending"
@@ -705,10 +690,10 @@
        "message": "Select ugoira convert tool"
    },
    "_startup_message": {
-       "message": "Sine version v5.0.0, the extension could save images seperately without have to pack them into a zip file to save. But it require user authorization to do it. Please click more info to get details. You can change any settings in settings page later."
+       "message": "There have been constant problems since the 6.0.0 version update, and the main reason is that the upgrade was too hasty and led to some mistakes in decision-making. After this period of repairs, it should be back to road. Thank you for continuing to use and report problems. Due to some personal affairs that need to be dealt with later, the later plan is to deal with issues in every two weeks. Please understand 🙏."
    },
    "_ffmpeg_custom_convert_command": {
-       "message": "FFmpeg custom convert command"
+       "message": "FFmpeg custom convert command, press enter for new line"
    },
    "_custom": {
        "message": "Custom"
@@ -728,8 +713,8 @@
    "_create_subdirectory": {
        "message": "Create Subdirectory"
    },
-   "_create_subdirectory_when_download_Pack_Files_setting_is_disabled": {
-       "message": "Create subdirectory when download \"Pack Files\" setting is disabled"
+   "_create_subdirectory_for_illustration": {
+       "message": "Create subdirectory for illustration"
    },
    "_dynamic": {
        "message": "Dynamic"
@@ -756,7 +741,7 @@
        "message": "Unit: ms"
    },
    "_add_time_gap_between_each_file_download_to_prevent_download_issue": {
-       "message": "Add time gap between each file download to prevent download issue"
+       "message": "Add time gap between each file download to prevent download issues"
    },
    "_diagnosis_messages": {
        "message": "Diagnosis Messages"
@@ -818,9 +803,6 @@
    "_rename_comic": {
         "message": "Rename comic"
     },
-    "_rename_comic_image": {
-        "message": "Rename comic image"
-    },
     "_save_comic_in_relative_location": {
         "message": "Save comic in relative location"
     },
@@ -844,5 +826,161 @@
     },
     "_page_num": {
         "message": "Page number"
+    },
+    "_download_metadata": {
+        "message": "Download metadata"
+    },
+    "_download_metadata_when_downloading_works_only_support_works_from_pixiv_main_site": {
+        "message": "Download metadata when downloading works. Only support works (novel not included) from Pixiv main site"
+    },
+    "_all": {
+        "message": "All"
+    },
+    "_download_manager": {
+        "message": "Download Manager"
+    },
+    "_show_in_folder": {
+        "message": "Show in folder"
+    },
+    "_download_task_settings": {
+        "message": "Download Task Settings"
+    },
+    "_global_settings": {
+        "message": "Global"
+    },
+    "_global_setting": {
+        "message": "Global Setting"
+    },
+    "_rename": {
+        "message": "Rename"
+    },
+    "_downloaded": {
+        "message": "Downloaded"
+    },
+    "_the_resource_is_already_in_download_manager": {
+        "message": "This download resource is already in download manager. Re-download it?"
+    },
+    "_download_manager_isnt_open": {
+        "message": "It seems the download manager didn't open, you may open one in the Options or Popup page. Open it now?"
+    },
+    "_switch_to_it_and_close": {
+        "message": "Switch to it and close"
+    },
+    "_download_manager_is_already_opened": {
+        "message": "Download manager is already opened."
+    },
+    "_there_isnt_any_download": {
+        "message": "There isn't any download"
+    },
+    "_cancel": {
+        "message": "Cancel"
+    },
+    "_max_process_download_tasks": {
+        "message": "Max process download tasks at same time"
+    },
+    "_rename_illustration_image": {
+        "message": "Rename illustration image"
+    },
+    "_rename_manga_image": {
+        "message": "Rename manga image"
+    },
+    "_rename_fanbox_post_image": {
+        "message": "Rename image in Fanbox Post"
+    },
+    "_rename_pixiv_comic_episode_image": {
+        "message": "Rename image page in Pixiv Comic"
+    },
+    "_zip_multiple_images": {
+        "message": "Create zip file for downloads"
+    },
+    "_zip_multiple_images_desc": {
+        "message": "Only effect the illust, manga and comic work take"
+    },
+    "_download_gif": {
+        "message": "DL GIF"
+    },
+    "_download_apng": {
+        "message": "DL APNG"
+    },
+    "_download_webm": {
+        "message": "DL WEBM"
+    },
+    "_download_mp4": {
+        "message": "DL MP4"
+    },
+    "_download_custom": {
+        "message": "DL Custom"
+    },
+    "_download_added": {
+        "message": "Download added"
+    },
+    "_opening_download_manager": {
+        "message": "Opening Download Manager, please wait..."
+    },
+    "_running_too_many_download_tasks_at_same_time_may_be_cause_high_CPU_usage": {
+        "message": "Running too many download tasks at same time will cause high CPU usage"
+    },
+    "_use_standalone_download_manage": {
+        "message": "Use standalone download manager"
+    },
+    "_always": {
+        "message": "Always"
+    },
+    "_when_there_is_only_one_image": {
+        "message": "When only one image"
+    },
+    "_dont_create_work_folder": {
+        "message": "Don't create work folder when ..."
+    },
+    "_dont_create_work_folder_desc": {
+        "message": "Only effect the illustration and Fanbox work"
+    },
+    "_combin_work_and_image_rename_rule_when_dont_create_work_folder": {
+        "message": "Combine work and image rename rule with \"_\" when don't create work folder"
+    },
+    "_new_settings": {
+        "message": "New Settings"
+    },
+    "_legacy": {
+        "message": "Legacy"
+    },
+    "_download_mode": {
+        "message": "Download mode"
+    },
+    "_download_mode_desc": {
+        "message": "In legacy mode, ffmpeg and .mp4 generation isn't supported"
+    },
+    "_only_if_the_work_has_multiple_images": {
+        "message": "Only if the work has multiple images"
+    },
+    "_only_when_downloading_multiple_images": {
+        "message": "Only when downloading multiple images"
+    },
+    "_only_if_the_work_has_one_image": {
+        "message": "Only if the work has one image"
+    },
+    "_only_when_downloading_one_image": {
+        "message": "Only when downloading one image"
+    },
+    "_download_save_mode": {
+        "message": "Download save mode"
+    },
+    "_download_save_mode_0_desc": {
+        "message": "Pack downloaded image(s) into zip and save"
+    },
+    "_download_save_mode_1_desc": {
+        "message": "Save downloaded image(s) in folder directly"
+    },
+    "_pack_in_zip": {
+        "message": "Pack in zip"
+    },
+    "_save_in_folder": {
+        "message": "Save in folder"
+    },
+    "_always_dont": {
+        "message": "Always dont"
+    },
+    "_always_create": {
+        "message": "Always create"
     }
 }
